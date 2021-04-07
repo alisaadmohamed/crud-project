@@ -3,11 +3,39 @@
 
 
 var ProductNameInput = document.getElementById("ProductNameInput");
+var productNameAlert = document.getElementById("productNameAlert");
 var ProductPriceInput = document.getElementById("ProductPriceInput");
 var ProductCategoryInput = document.getElementById("ProductCategoryInput");
 var ProductDescriptionInput = document.getElementById("ProductDescriptionInput");
 
 var productContainer;
+
+
+
+
+function validateProductName()
+{
+
+	var regex =/^[A-Z][a-z]{3,8}$/
+	
+	if(regex.test(ProductNameInput.value) == true) {
+		productNameAlert.classList.replace("d-block" ,"d-none")
+		ProductNameInput.classList.add("is-valid")
+		ProductNameInput.classList.remove("is-invalid")
+		return true;
+	}
+	 else
+	 {
+		productNameAlert.classList.replace("d-none" ,"d-block")
+		ProductNameInput.classList.add("is-invalid")
+		ProductNameInput.classList.remove("is-valid")
+		return false;
+	}
+};
+
+ProductNameInput.addEventListener("keyup" , validateProductName);
+
+
 
 
 if(localStorage.getItem("myProduct") == null)
@@ -22,18 +50,22 @@ if(localStorage.getItem("myProduct") == null)
 function addProduct()
 {
 	
-var product = {
-	name:ProductNameInput.value,
-	price:ProductPriceInput.value,
-	Category:ProductCategoryInput.value,
-	Description:ProductDescriptionInput.value
-	}
+if(validateProductName() == true) {
+	var product = {
+		name:ProductNameInput.value,
+		price:ProductPriceInput.value,
+		Category:ProductCategoryInput.value,
+		Description:ProductDescriptionInput.value
+		}
+	
+		productContainer.push(product);
+		localStorage.setItem("myProduct" , JSON.stringify(productContainer));
+		displayProduct()
+		clearForm();
+		console.log(productContainer);
+}
 
-	productContainer.push(product);
-	localStorage.setItem("myProduct" , JSON.stringify(productContainer));
-	displayProduct()
-	clearForm();
-	console.log(productContainer);
+
 }
 
 function clearForm()
